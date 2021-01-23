@@ -8,6 +8,6 @@ export class Employee {
   email: string;
   username: string;
   hire_date: string;
-  isAdmin: boolean;
+  is_superuser: boolean;
   access?: string;
 }

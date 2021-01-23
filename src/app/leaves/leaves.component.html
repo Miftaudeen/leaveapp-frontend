@@ -3,9 +3,9 @@
 <div class="mat-elevation-z8">
 
 <div class="mat-elevation-z8 ma-15">
-  <div class="row ma-15">
-              <mat-label fxFlex class="ma-15">Relief</mat-label>
-              <input type="text" placeholder="Search Employee"
+  <div fxLayout="row" fxLayoutAlign="space-around">
+              <mat-label class="ma-20 ms-20">Relief</mat-label>
+              <input class="ma-20" type="text" placeholder="Search Employee"
                      aria-label="Number"
                      matInput #relief
                      [formControl]="myControl"
@@ -16,9 +16,9 @@
                   </mat-option>
                 </mat-autocomplete>
     </div>
-  <div class="row ma-15">
-              <mat-label fxFlex class="ma-50">Leave Policy</mat-label>
-              <input type="text" placeholder="Search Leave Policy"
+  <div fxLayout="row" fxLayoutAlign="space-around">
+              <mat-label class="ma-20 ms-20">Leave Policy</mat-label>
+              <input class="ma-20" type="text" placeholder="Search Leave Policy"
                      aria-label="Number"
                      matInput #leave_policy
                      [formControl]="policyControl"
@@ -29,26 +29,28 @@
                   </mat-option>
                 </mat-autocomplete>
     </div>
-<div class="row ma-15">
+<div fxLayout="row" fxLayoutAlign="space-around">
+  <mat-label>Start Date</mat-label>
               <mat-form-field>
-
                 <input type="date" placeholder="Start Date"
                      aria-label="Number"
                      matInput #start_date>
               </mat-form-field>
   </div>
-<div class="row ma-15">
+<div fxLayout="row" fxLayoutAlign="space-around">
+<mat-label>End Date</mat-label>
   <mat-form-field>
-
                 <input type="date" placeholder="End Date"
                      aria-label="Number"
                      matInput #end_date>
               </mat-form-field>
 </div>
-
+<div  fxLayout="row" fxLayoutAlign="space-around" class="ma-20 ms-50">
 
               <button mat-raised-button color="accent"
                       (click)="postLeave(relief.value, start_date.value, end_date.value, leave_policy.value)">Request Leave</button>
+</div>
+
       </div>
   <table mat-table aria-label="Elements" matSort #sort="matSort" [dataSource]="dataSource">
 

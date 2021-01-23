@@ -4,20 +4,20 @@
       <button mat-button routerLink="/"><mat-icon>home</mat-icon></button>
     </span>
     <div fxLayout="row" fxShow="false" fxShow.gt-sm>
-      <button mat-menu-item routerLink="/leaves/" *ngIf="isAuthenticated">
-      <mat-icon>book</mat-icon>
+      <button mat-menu-item routerLink="/leaves/" *ngIf="isAuthenticated()">
+      <mat-icon>work_off</mat-icon>
         Leaves
       </button>
-      <button mat-menu-item *ngIf="isAuthenticated">
+      <button mat-menu-item *ngIf="isAuthenticated()">
       <a href="https://afexleaveapp.herokuapp.com/admin/" target="_blank"><mat-icon>settings</mat-icon>
       Admin
         </a>
     </button>
-    <button mat-button routerLink="/login" *ngIf="!isAuthenticated">
+    <button mat-button routerLink="/login" *ngIf="!isAuthenticated()">
       <mat-icon>power_settings_new</mat-icon>
       Login
     </button>
-    <button mat-button *ngIf="isAuthenticated" (click)="logout()">
+    <button mat-button *ngIf="isAuthenticated()" (click)="logout()">
       <mat-icon>exit_to_app</mat-icon>
       Logout
     </button>
@@ -27,13 +27,13 @@
   </button>
 </mat-toolbar>
 <mat-menu xPosition="before" #menu="matMenu" >
-  <button mat-menu-item routerLink="/" *ngIf="isAuthenticated">
+  <button mat-menu-item routerLink="/" *ngIf="isAuthenticated()">
     <mat-icon>home</mat-icon>
     Home
   </button>
-  <button mat-menu-item routerLink="/hostels" *ngIf="isAdmin">
+  <button mat-menu-item routerLink="/leaves" *ngIf="isAuthenticated()">
     <mat-icon>home</mat-icon>
-    Management
+    Leaves
   </button>
   <button mat-menu-item *ngIf="isAuthenticated">
       <a href="https://afexleaveapp.herokuapp.com/admin/" target="_blank"><mat-icon>settings</mat-icon>

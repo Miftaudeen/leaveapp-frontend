@@ -9,19 +9,18 @@ import {AuthenticationService} from './_services';
 })
 export class AppComponent {
   title = 'Leave Application Portal';
-  isAuthenticated = false;
   private user: Employee;
   constructor(private authenticationService: AuthenticationService) {
-        this.authenticationService.user.subscribe(x => this.user = x);
-        if (authenticationService.userValue) {
-          this.isAuthenticated = true;
-        }
+    this.authenticationService.user.subscribe(x => this.user = x);
     }
     get isAdmin() {
-        return this.user && this.user.isAdmin;
+        return this.user && this.user.is_superuser;
     }
     logout() {
         this.authenticationService.logout();
     }
 
+    isAuthenticated(){
+    return !!this.authenticationService.userValue;
+    }
 }

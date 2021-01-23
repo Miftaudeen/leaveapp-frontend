@@ -47,7 +47,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 username: user.username,
                 firstName: user.first_name,
                 lastName: user.last_name,
-                isAdmin: user.isAdmin,
+                isAdmin: user.is_superuser,
                 token: `fake-jwt-token.${user.id}`
             });
         }
@@ -87,7 +87,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         }
 
         function isAdmin() {
-            return isLoggedIn() && currentEmployee().isAdmin;
+            return isLoggedIn() && currentEmployee().is_superuser;
         }
 
         function currentEmployee() {
