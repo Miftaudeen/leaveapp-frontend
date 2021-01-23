@@ -1,0 +1,32 @@
+<section fxLayout="row wrap" fxLayoutAlign="center center" class="background">
+  <mat-card fxFlex="500px" fxFlex.xs="100%" *ngIf="userFromApi">
+        <mat-card-title>Employee Information</mat-card-title>
+        <mat-card-content class="background">
+          <div fxLayout="column wrap" fxLayoutGap="40px">
+
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Full Name:</strong></div>
+              <div fxFlex>{{userFromApi.last_name}} {{userFromApi.first_name}}</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Hire Date:</strong></div>
+              <div fxFlex>{{userFromApi?.hire_date}}</div>
+            </div>
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Email Address</strong></div>
+              <div fxFlex>{{userFromApi.email}}</div>
+            </div>
+
+
+            <div fxLayout="row wrap" fxFlex>
+              <div fxFlex><strong>Username</strong></div>
+              <div fxFlex>{{userFromApi.username}}</div>
+            </div>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+</section>

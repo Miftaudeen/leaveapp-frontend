@@ -1,0 +1,111 @@
+﻿import { Injectable } from '@angular/core';
+import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
+
+import { Employee } from '../_models';
+
+const users: Employee[] = [
+];
+
+@Injectable()
+export class FakeBackendInterceptor implements HttpInterceptor {
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        const { url, method, headers, body } = request;
+
+        // wrap in delayed observable to simulate server api call
+        return of(null)
+            .pipe(mergeMap(handleRoute))
+          // tslint:disable-next-line:max-line-length
+            .pipe(materialize()) // call materialize and dematerialize to ensure delay even if an error is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648)
+            .pipe(delay(500))
+            .pipe(dematerialize());
+
+        function handleRoute() {
+            switch (true) {
+                case url.endsWith('/users/authenticate') && method === 'POST':
+                    return authenticate();
+                case url.endsWith('/users') && method === 'GET':
+                    return getEmployees();
+                case url.match(/\/users\/\d+$/) && method === 'GET':
+                    return getEmployeeById();
+                default:
+                    // pass through any requests not handled above
+                    return next.handle(request);
+            }
+
+        }
+
+        // route functions
+
+        function authenticate() {
+            const { username, password } = body;
+            const user = users.find(x => x.username === username && x.password === password);
+            if (!user) { return error('Employeename or password is incorrect'); }
+            return ok({
+                id: user.id,
+                username: user.username,
+                firstName: user.first_name,
+                lastName: user.last_name,
+                isAdmin: user.isAdmin,
+                token: `fake-jwt-token.${user.id}`
+            });
+        }
+
+        function getEmployees() {
+            if (!isAdmin()) { return unauthorized(); }
+            return ok(users);
+        }
+
+        function getEmployeeById() {
+            if (!isLoggedIn()) { return unauthorized(); }
+
+            // only admins can access other user records
+            if (!isAdmin() && currentEmployee().id !== idFromUrl()) { return unauthorized(); }
+
+            const user = users.find(x => x.id === idFromUrl());
+            return ok(user);
+        }
+
+        // helper functions
+
+        function ok(content) {
+            return of(new HttpResponse({ status: 200, body }));
+        }
+
+        function unauthorized() {
+            return throwError({ status: 401, error: { message: 'unauthorized' } });
+        }
+
+        function error(message) {
+            return throwError({ status: 400, error: { message } });
+        }
+
+        function isLoggedIn() {
+            const authHeader = headers.get('Authorization') || '';
+            return authHeader.startsWith('Bearer fake-jwt-token');
+        }
+
+        function isAdmin() {
+            return isLoggedIn() && currentEmployee().isAdmin;
+        }
+
+        function currentEmployee() {
+            if (!isLoggedIn()) { return; }
+            const id = parseInt(headers.get('Authorization').split('.')[1]);
+            return users.find(x => x.id === id);
+        }
+
+        function idFromUrl() {
+            const urlParts = url.split('/');
+            return parseInt(urlParts[urlParts.length - 1]);
+        }
+    }
+}
+
+export const fakeBackendProvider = {
+    // use fake backend in place of Http service for backend-less development
+    provide: HTTP_INTERCEPTORS,
+    useClass: FakeBackendInterceptor,
+    multi: true
+};

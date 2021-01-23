@@ -1,0 +1,102 @@
+<router-outlet></router-outlet>
+
+<div class="mat-elevation-z8">
+
+<div class="mat-elevation-z8 ma-15">
+  <div class="row ma-15">
+              <mat-label fxFlex class="ma-15">Relief</mat-label>
+              <input type="text" placeholder="Search Employee"
+                     aria-label="Number"
+                     matInput #relief
+                     [formControl]="myControl"
+                     [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id">
+                    {{getStudent(option)}}
+                  </mat-option>
+                </mat-autocomplete>
+    </div>
+  <div class="row ma-15">
+              <mat-label fxFlex class="ma-50">Leave Policy</mat-label>
+              <input type="text" placeholder="Search Leave Policy"
+                     aria-label="Number"
+                     matInput #leave_policy
+                     [formControl]="policyControl"
+                     [matAutocomplete]="policy_auto">
+                <mat-autocomplete #policy_auto="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredPolicyOptions | async" [value]="option.id">
+                    {{option.leave_type}}
+                  </mat-option>
+                </mat-autocomplete>
+    </div>
+<div class="row ma-15">
+              <mat-form-field>
+
+                <input type="date" placeholder="Start Date"
+                     aria-label="Number"
+                     matInput #start_date>
+              </mat-form-field>
+  </div>
+<div class="row ma-15">
+  <mat-form-field>
+
+                <input type="date" placeholder="End Date"
+                     aria-label="Number"
+                     matInput #end_date>
+              </mat-form-field>
+</div>
+
+
+              <button mat-raised-button color="accent"
+                      (click)="postLeave(relief.value, start_date.value, end_date.value, leave_policy.value)">Request Leave</button>
+      </div>
+  <table mat-table aria-label="Elements" matSort #sort="matSort" [dataSource]="dataSource">
+
+    <ng-container matColumnDef="seqNo">
+        <th class="mat-column-weight" mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let row; let i = index" class="mat-column-weight">{{(paginator.pageIndex * paginator.pageSize) + (i + 1)}}</td>
+      </ng-container>
+
+
+    <!-- Employee Column -->
+    <ng-container matColumnDef="employee">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-weight">Employee</th>
+      <td mat-cell *matCellDef="let row" class="mat-column-weight">{{row.employee}}</td>
+    </ng-container>
+
+    <!-- Submission Column -->
+    <ng-container matColumnDef="submissionDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-weight">Submission Date</th>
+      <td mat-cell *matCellDef="let row" class="mat-column-weight">{{row.submission_date | date: 'long'}}</td>
+    </ng-container>
+
+    <!-- Start Column -->
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-weight">Start Date</th>
+      <td mat-cell *matCellDef="let row" class="mat-column-weight">{{row.start_date | date: 'long'}}</td>
+    </ng-container>
+
+    <!-- End Date Column -->
+    <ng-container matColumnDef="endDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-weight">End Date</th>
+      <td mat-cell *matCellDef="let row" class="mat-column-weight">{{row.end_date | date: 'long'}}</td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-weight">Status</th>
+      <td mat-cell *matCellDef="let row" class="mat-column-weight">{{row.status}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator
+      [length]="dataSource?.data.length"
+      [pageIndex]="0"
+      [pageSize]="50"
+      [pageSizeOptions]="[25, 50, 100, 250]">
+  </mat-paginator>
+</div>
+
