@@ -116,7 +116,7 @@ export class LeavesComponent implements OnInit {
     );
   }
 
-  postLeave(relief: string, startDate: string, endDate: string, leavePolicy:string) {
+  postLeave(relief: string, startDate: string, endDate: string, leavePolicy: string) {
 
     const body = {
       employee: this.user.id,
